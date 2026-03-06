@@ -211,3 +211,23 @@ pub fn reorder_todos(
     save_store(&app, &store)?;
     Ok(store.todos.clone())
 }
+
+#[cfg_attr(mobile, tauri::mobile_entry_point)]
+pub fn run() {
+    tauri::Builder::default()
+        .plugin(tauri_plugin_fs::init())
+        .manage(AppState {
+            store: Mutex::new(TodoStore::default()),
+        })
+        .invoke_handler(tauri::generate_handler![
+            get_todos,
+            create_todo,
+            update_todo,
+            delete_todo,
+            toggle_todo,
+            clear_completed,
+            reorder_todos,
+        ])
+        .run(tauri::generate_context!())
+        .expect("error while running tauri application");
+}
