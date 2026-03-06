@@ -63,21 +63,21 @@ fn save_store(app: &AppHandle, store: &TodoStore) -> Result<(), String> {
 }
 
 #[tauri::command]
-pub fn get_todos(app: AppHandle, state: tauri::State<'_, AppState>) -> Result<Vec<Todo>, String> {
+fn get_todos(app: AppHandle, state: tauri::State<AppState>) -> Result<Vec<Todo>, String> {
     let mut store = state.store.lock().map_err(|e| e.to_string())?;
     *store = load_store(&app);
     Ok(store.todos.clone())
 }
 
 #[derive(Debug, Deserialize)]
-pub struct CreateTodoInput {
-    pub title: String,
-    pub priority: Priority,
-    pub category: String,
+struct CreateTodoInput {
+    title: String,
+    priority: Priority,
+    category: String,
 }
 
 #[tauri::command]
-pub fn create_todo(
+fn create_todo(
     app: AppHandle,
     state: tauri::State<'_, AppState>,
     input: CreateTodoInput,
@@ -102,16 +102,16 @@ pub fn create_todo(
 }
 
 #[derive(Debug, Deserialize)]
-pub struct UpdateTodoInput {
-    pub id: String,
-    pub title: Option<String>,
-    pub completed: Option<bool>,
-    pub priority: Option<Priority>,
-    pub category: Option<String>,
+struct UpdateTodoInput {
+    id: String,
+    title: Option<String>,
+    completed: Option<bool>,
+    priority: Option<Priority>,
+    category: Option<String>,
 }
 
 #[tauri::command]
-pub fn update_todo(
+fn update_todo(
     app: AppHandle,
     state: tauri::State<'_, AppState>,
     input: UpdateTodoInput,
@@ -145,7 +145,7 @@ pub fn update_todo(
 }
 
 #[tauri::command]
-pub fn delete_todo(
+fn delete_todo(
     app: AppHandle,
     state: tauri::State<'_, AppState>,
     id: String,
@@ -158,7 +158,7 @@ pub fn delete_todo(
 }
 
 #[tauri::command]
-pub fn toggle_todo(
+fn toggle_todo(
     app: AppHandle,
     state: tauri::State<'_, AppState>,
     id: String,
@@ -181,7 +181,7 @@ pub fn toggle_todo(
 }
 
 #[tauri::command]
-pub fn clear_completed(
+fn clear_completed(
     app: AppHandle,
     state: tauri::State<'_, AppState>,
 ) -> Result<Vec<Todo>, String> {
@@ -193,7 +193,7 @@ pub fn clear_completed(
 }
 
 #[tauri::command]
-pub fn reorder_todos(
+fn reorder_todos(
     app: AppHandle,
     state: tauri::State<'_, AppState>,
     ids: Vec<String>,
