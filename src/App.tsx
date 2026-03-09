@@ -101,11 +101,10 @@ function App() {
   }
 
   return (
-    <div className="h-screen flex flex-col rounded-2xl overflow-hidden
-                    bg-gray-50 dark:bg-gray-950
-                    border border-gray-300/40 dark:border-gray-700/50
-                    shadow-[0_8px_40px_rgba(0,0,0,0.35)]
-                    transition-colors duration-300">
+    <div className="h-screen bg-transparent p-[2px]">
+      <div className="h-full flex flex-col rounded-2xl overflow-hidden
+                      bg-gray-50 dark:bg-gray-950
+                      transition-colors duration-300">
 
       {/* Custom title bar */}
       <Header darkMode={darkMode} onToggleDarkMode={() => setDarkMode(!darkMode)} />
@@ -145,6 +144,7 @@ function App() {
           </div>
         </div>
       </div>
+    </div>
     </div>
   );
 }
