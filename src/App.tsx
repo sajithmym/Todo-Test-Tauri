@@ -105,7 +105,7 @@ function App() {
       <div className="max-w-2xl mx-auto px-4 py-8">
         <Header darkMode={darkMode} onToggleDarkMode={() => setDarkMode(!darkMode)} />
 
-        <div className="mt-8 space-y-4">
+        <div className="mt-4 rounded-2xl bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 shadow-xl p-5 space-y-4">
           <TodoInput onAdd={handleCreate} />
 
           {todos.length > 0 && (
