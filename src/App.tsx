@@ -101,39 +101,48 @@ function App() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-blue-50 dark:from-gray-950 dark:via-gray-900 dark:to-gray-950 transition-colors duration-300">
-      <div className="max-w-2xl mx-auto px-4 py-8">
-        <Header darkMode={darkMode} onToggleDarkMode={() => setDarkMode(!darkMode)} />
+    <div className="h-screen flex flex-col rounded-2xl overflow-hidden
+                    bg-gray-50 dark:bg-gray-950
+                    border border-gray-300/40 dark:border-gray-700/50
+                    shadow-[0_8px_40px_rgba(0,0,0,0.35)]
+                    transition-colors duration-300">
 
-        <div className="mt-4 rounded-2xl bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 shadow-xl p-5 space-y-4">
-          <TodoInput onAdd={handleCreate} />
+      {/* Custom title bar */}
+      <Header darkMode={darkMode} onToggleDarkMode={() => setDarkMode(!darkMode)} />
 
-          {todos.length > 0 && (
-            <>
-              <StatsBar stats={stats} />
-              <FilterBar
-                filter={filter}
-                onFilterChange={setFilter}
-                searchQuery={searchQuery}
-                onSearchChange={setSearchQuery}
-                hasCompleted={stats.completed > 0}
-                onClearCompleted={handleClearCompleted}
+      {/* Scrollable content */}
+      <div className="flex-1 overflow-y-auto bg-gradient-to-br from-gray-50 via-white to-blue-50 dark:from-gray-950 dark:via-gray-900 dark:to-gray-950">
+        <div className="max-w-2xl mx-auto px-4 py-6">
+          <div className="rounded-2xl bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 shadow-xl p-5 space-y-4">
+            <TodoInput onAdd={handleCreate} />
+
+            {todos.length > 0 && (
+              <>
+                <StatsBar stats={stats} />
+                <FilterBar
+                  filter={filter}
+                  onFilterChange={setFilter}
+                  searchQuery={searchQuery}
+                  onSearchChange={setSearchQuery}
+                  hasCompleted={stats.completed > 0}
+                  onClearCompleted={handleClearCompleted}
+                />
+              </>
+            )}
+
+            {sortedTodos.length > 0 ? (
+              <TodoList
+                todos={sortedTodos}
+                onToggle={handleToggle}
+                onUpdate={handleUpdate}
+                onDelete={handleDelete}
               />
-            </>
-          )}
-
-          {sortedTodos.length > 0 ? (
-            <TodoList
-              todos={sortedTodos}
-              onToggle={handleToggle}
-              onUpdate={handleUpdate}
-              onDelete={handleDelete}
-            />
-          ) : todos.length === 0 ? (
-            <EmptyState type="no-todos" />
-          ) : (
-            <EmptyState type="no-results" />
-          )}
+            ) : todos.length === 0 ? (
+              <EmptyState type="no-todos" />
+            ) : (
+              <EmptyState type="no-results" />
+            )}
+          </div>
         </div>
       </div>
     </div>
