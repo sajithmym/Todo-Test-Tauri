@@ -1,28 +1,12 @@
-import { useEffect, useState } from "react";
 import { getCurrentWindow } from "@tauri-apps/api/window";
 
 interface HeaderProps {
   darkMode: boolean;
   onToggleDarkMode: () => void;
+  isMaximized: boolean;
 }
 
-export function Header({ darkMode, onToggleDarkMode }: HeaderProps) {
-  const [isMaximized, setIsMaximized] = useState(false);
-
-  useEffect(() => {
-    const win = getCurrentWindow();
-    win.isMaximized().then(setIsMaximized);
-
-    let unlistenFn: (() => void) | undefined;
-    win.onResized(() => {
-      win.isMaximized().then(setIsMaximized);
-    }).then((fn) => {
-      unlistenFn = fn;
-    });
-    return () => {
-      unlistenFn?.();
-    };
-  }, []);
+export function Header({ darkMode, onToggleDarkMode, isMaximized }: HeaderProps) {
 
   const handleMinimize = () => getCurrentWindow().minimize();
   const handleMaximize = () => getCurrentWindow().toggleMaximize();

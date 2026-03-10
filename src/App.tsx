@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
+import { getCurrentWindow } from "@tauri-apps/api/window";
 import type { Todo, FilterType, Priority, CreateTodoInput, UpdateTodoInput } from "./types";
 import * as api from "./api";
 import { Header } from "./components/Header";
@@ -19,6 +20,15 @@ function App() {
     return false;
   });
   const [loading, setLoading] = useState(true);
+  const [isMaximized, setIsMaximized] = useState(false);
+
+  useEffect(() => {
+    const win = getCurrentWindow();
+    win.isMaximized().then(setIsMaximized);
+    let unlisten: (() => void) | undefined;
+    win.onResized(() => { win.isMaximized().then(setIsMaximized); }).then(fn => { unlisten = fn; });
+    return () => { unlisten?.(); };
+  }, []);
 
   useEffect(() => {
     document.documentElement.classList.toggle("dark", darkMode);
@@ -101,13 +111,14 @@ function App() {
   }
 
   return (
-    <div className="h-screen bg-transparent p-[2px]">
-      <div className="h-full flex flex-col rounded-2xl overflow-hidden
+    <div className={`h-screen bg-transparent ${isMaximized ? "p-0" : "p-[2px]"}`}>
+      <div className={`h-full flex flex-col overflow-hidden
                       bg-gray-50 dark:bg-gray-950
-                      transition-colors duration-300">
+                      transition-colors duration-300
+                      ${isMaximized ? "rounded-none" : "rounded-2xl"}`}>
 
       {/* Custom title bar */}
-      <Header darkMode={darkMode} onToggleDarkMode={() => setDarkMode(!darkMode)} />
+      <Header darkMode={darkMode} onToggleDarkMode={() => setDarkMode(!darkMode)} isMaximized={isMaximized} />
 
       {/* Scrollable content */}
       <div className="flex-1 overflow-y-auto bg-gradient-to-br from-gray-50 via-white to-blue-50 dark:from-gray-950 dark:via-gray-900 dark:to-gray-950">
